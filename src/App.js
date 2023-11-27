@@ -47,6 +47,7 @@ const tempWatchedData = [
   },
 ];
 const KEY = "2150420f";
+const query = "rocky";
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
@@ -56,7 +57,9 @@ export default function App() {
 
   useEffect(function () {
     async function fetchMovies() {
-      const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=rocky`);
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+      );
       const data = await res.json();
       setMovies(data.Search);
     }
