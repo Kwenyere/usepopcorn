@@ -47,7 +47,7 @@ const tempWatchedData = [
   },
 ];
 const KEY = "2150420f";
-const query = "uuuuu";
+const query = "interstellar";
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
@@ -64,6 +64,7 @@ export default function App() {
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
         );
+        //To handle error
         if (!res.ok) throw new Error("Something wrong in fetching movie");
         const data = await res.json();
         if (data.Response === "False") throw new Error("Movie not found");
@@ -76,7 +77,7 @@ export default function App() {
       }
     }
     fetchMovies();
-  }, {});
+  }, []);
 
   return (
     <>
