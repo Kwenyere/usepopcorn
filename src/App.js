@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import StarRating from "./StarRating";
 
 const tempMovieData = [
   {
@@ -243,12 +244,57 @@ function Movies({ movie, onSelectMovie }) {
 }
 
 function MovieDetails({ selectedId, onCloseMovie }) {
+  const [displayMovie, setDisplayMovie] = useState([]);
+  //destructuring some of the object name from the api
+  const {
+    Title: title,
+    Year: year,
+    Plot: plot,
+    Poster: poster,
+    RunTime: runtime,
+    Released: released,
+    imdbRating,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+  } = displayMovie;
+  console.log(title, year);
+  useEffect(function () {
+    async function getMovieDetails() {
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
+      );
+      const data = await res.json();
+      setDisplayMovie(data);
+    }
+    getMovieDetails();
+  }, []);
   return (
-    <div className="detail">
-      <button className="btn-back" onClick={onCloseMovie}>
-        &larr;
-      </button>
-      {selectedId}
+    <div className="details">
+      <header>
+        <button className="btn-back" onClick={onCloseMovie}>
+          &larr;
+        </button>
+        <img src={poster} alt={`Picture of ${displayMovie} movie`} />
+        <div className="details-overview">
+          <h2>{title}</h2>
+          <p>
+            {released} &bull; {runtime}
+          </p>
+          <p>{genre}</p>
+          <p>
+            <span>⭐ {imdbRating} IMBD Rating</span>
+          </p>
+        </div>
+      </header>
+      <section>
+        <div className="rating">
+          <StarRating maxRating={10} size={24} />
+        </div>
+        <p>{plot}</p>
+        <p>Srarring: {actors}</p>
+        <p>Directed by {director}</p>
+      </section>
     </div>
   );
 }
