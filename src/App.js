@@ -258,6 +258,11 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   const [userRating, setUserRating] = useState("");
   //To prevent add the same movie
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+
+  //To remember the current rating for an already rated movie
+  const alreadyRatedMovie = watched.find(
+    (movie) => movie.imdbID === selectedId
+  )?.userRating;
   //to handle watched movies
   //destructuring some of the object name from the api
   const {
@@ -341,7 +346,9 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
                   )}{" "}
                 </>
               ) : (
-                <p>You have rated this movie</p>
+                <p>
+                  You have rated this movie {alreadyRatedMovie} <span>⭐</span>
+                </p>
               )}
             </div>
             <p>{plot}</p>
