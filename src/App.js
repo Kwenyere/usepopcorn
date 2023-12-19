@@ -319,7 +319,12 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   //To change the movie Title in the browser
   useEffect(
     function () {
+      if (!title) return;
       document.title = `Movie | ${title}`;
+      // Cleanup function: a function that can be returned in useEffect
+      return function () {
+        document.title = "usePopCorn";
+      };
     },
     [title]
   );
