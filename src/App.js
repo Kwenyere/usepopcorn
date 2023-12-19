@@ -71,6 +71,10 @@ export default function App() {
     setWatched((watched) => [...watched, movie]);
   }
 
+  function handleDeleteMovies(id) {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+  }
+
   //To fetch the movies
   useEffect(
     function () {
@@ -130,7 +134,10 @@ export default function App() {
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMovieList watched={watched} />
+              <WatchedMovieList
+                watched={watched}
+                onDeleteWatched={handleDeleteMovies}
+              />
             </>
           )}
         </Box>
@@ -318,7 +325,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
             <button className="btn-back" onClick={onCloseMovie}>
               &larr;
             </button>
-            <img src={poster} alt={`Picture of ${movie} movie`} />
+            <img src={poster} alt={` Picture of ${movie} poster`} />
             <div className="details-overview">
               <h2>{title}</h2>
               <p>
@@ -343,7 +350,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
                     <button className="btn-add" onClick={handleAdd}>
                       + Add to list
                     </button>
-                  )}{" "}
+                  )}
                 </>
               ) : (
                 <p>
@@ -390,17 +397,21 @@ function WatchedSummary({ watched }) {
   );
 }
 
-function WatchedMovieList({ watched }) {
+function WatchedMovieList({ watched, onDeleteWatched }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
-        <WatchedMovie key={movie.imdbID} movie={movie} />
+        <WatchedMovie
+          key={movie.imdbID}
+          movie={movie}
+          onDeleteWatched={onDeleteWatched}
+        />
       ))}
     </ul>
   );
 }
 
-function WatchedMovie({ movie }) {
+function WatchedMovie({ movie, onDeleteWatched }) {
   return (
     <li>
       <img src={movie.poster} alt={`${movie.title} poster`} />
@@ -418,6 +429,13 @@ function WatchedMovie({ movie }) {
           <span>⏳</span>
           <span>{movie.runtime} min</span>
         </p>
+
+        <button
+          className="btn-delete"
+          onClick={() => onDeleteWatched(movie.imdbID)}
+        >
+          X
+        </button>
       </div>
     </li>
   );
