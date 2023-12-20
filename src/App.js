@@ -109,6 +109,7 @@ export default function App() {
         setError("");
         return;
       }
+      handleClose();
       fetchMovies();
       //cleanup function
       return function () {
@@ -338,6 +339,23 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     },
     [title]
   );
+
+  //To remove movie when escape key is pressed
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+      document.addEventListener("keydown", callback);
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  );
+
   return (
     <div className="details">
       {isLoading ? (
