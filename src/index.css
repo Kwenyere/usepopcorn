@@ -16,11 +16,11 @@
   box-sizing: border-box;
 }
 
-.c {
+/* .c {
   color: #212529;
   font-size: 18px;
   margin-top: 2vw;
-}
+} */
 
 html {
   font-size: 62.5%;
@@ -31,7 +31,7 @@ body {
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 
   color: var(--color-text);
-  /* background-color: var(--color-background-900); */
+  background-color: var(--color-background-900);
   padding: 2.4rem;
 }
 
