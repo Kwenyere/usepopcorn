@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import Currencyconverter from "./Currencyconverter,";
+//import Currencyconverter from "./Currencyconverter,";
 // import StarRating from "./StarRating";
 // import TestExpander from "./Testexpander";
 // import { useState } from "react";
@@ -18,7 +18,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 // }
 root.render(
   <React.StrictMode>
-    {/* <Currencyconverter /> */}
     <App />
   </React.StrictMode>
 );
