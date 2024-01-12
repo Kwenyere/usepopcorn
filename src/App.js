@@ -161,7 +161,7 @@ function SearchInput({ query, setQuery }) {
 
   useEffect(
     function () {
-      function focus(e) {
+      function focusSearchInput(e) {
         //To prevent removing movies as one types keyword
         if (document.activeElement === inputEl.current) return;
         if (e.code === "Enter") {
@@ -169,8 +169,8 @@ function SearchInput({ query, setQuery }) {
           setQuery("");
         }
       }
-      document.addEventListener("keydown", focus);
-      return () => document.addEventListener("keydown", focus);
+      document.addEventListener("keydown", focusSearchInput);
+      return () => document.addEventListener("keydown", focusSearchInput);
     },
     [setQuery]
   );
