@@ -159,9 +159,21 @@ function NumResult({ movies }) {
 function SearchInput({ query, setQuery }) {
   const inputEl = useRef(null);
 
-  useEffect(function () {
-    inputEl.current.focus();
-  }, []);
+  useEffect(
+    function () {
+      function focus(e) {
+        //To prevent removing movies as one types keyword
+        if (document.activeElement === inputEl.current) return;
+        if (e.code === "Enter") {
+          inputEl.current.focus();
+          setQuery("");
+        }
+      }
+      document.addEventListener("keydown", focus);
+      return () => document.addEventListener("keydown", focus);
+    },
+    [setQuery]
+  );
   return (
     <input
       className="search"
