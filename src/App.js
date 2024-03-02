@@ -1,21 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
+import { useMovies } from "./UseMovies";
+import { useLocalStorageState } from "./useLocalStorageState";
 
 const KEY = "2150420f";
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
-
 export default function App() {
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const [error, setError] = useState("");
-  const [watched, setWatched] = useState([]);
+
   // const [watched, setWatched] = useState(function () {
   //   const storedValue = localStorage.getItem("watched");
   //   return JSON.parse(storedValue);
   // });
+
+  //Custom hook
+  const { isLoading, error, movies } = useMovies(query, handleClose);
+  const [watched, setWatched] = useLocalStorageState([], "watched");
 
   function handleSelectId(id) {
     setSelectedId((selectedId) => (selectedId === id ? null : id));
@@ -34,56 +36,12 @@ export default function App() {
   }
 
   //For Storage
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(...watched));
-    },
-    [watched]
-  );
-
-  //To fetch the movies
-  useEffect(
-    function () {
-      //To prevent fetching multiple data at the same time,use an AbortContoller
-      const controller = new AbortController();
-      async function fetchMovies() {
-        try {
-          setIsLoading(true);
-          setError("");
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
-            { signal: controller.signal }
-          );
-          //To handle error
-          if (!res.ok) throw new Error("Something wrong in fetching movie");
-          const data = await res.json();
-          if (data.Response === "False") throw new Error("Movie not found");
-          setMovies(data.Search);
-          setError("");
-        } catch (err) {
-          console.error(err.message);
-          if (err.name !== "AbortError") {
-            setError(err.message);
-          }
-        } finally {
-          setIsLoading(false);
-        }
-      }
-
-      if (query.length < 3) {
-        setMovies([]);
-        setError("");
-        return;
-      }
-      handleClose();
-      fetchMovies();
-      //cleanup function
-      return function () {
-        controller.abort();
-      };
-    },
-    [query]
-  );
+  // useEffect(
+  //   function () {
+  //     localStorage.setItem("watched", JSON.stringify(...watched));
+  //   },
+  //   [watched]
+  // );
 
   return (
     <>
@@ -361,6 +319,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
             <button className="btn-back" onClick={onCloseMovie}>
               &larr;
             </button>
+            {/* eslint-disable-next-line */}
             <img src={poster} alt={` Picture of ${movie} poster`} />
             <div className="details-overview">
               <h2>{title}</h2>
